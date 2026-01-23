@@ -44,7 +44,7 @@ export const micropub = new Micropub({
 		// 	{ type: 'game', name: 'Game' },
 		// ],
 	},
-	// formatSlug: (type, filename) => {
+	formatSlug: (type, filename) => {
 	// 	const typeToSlug = {
 	// 		like: 'likes',
 	// 		bookmark: 'bookmarks',
@@ -55,6 +55,6 @@ export const micropub = new Micropub({
 	// 		listen: 'listen',
 	// 		play: 'play'
 	// 	}
-	// 	return `${typeToSlug[type] || 'notes'}/${filename}`
-	// },
+		return `${filename}`
+	},
 })
