@@ -25,36 +25,73 @@ export const micropub = new Micropub({
 	config: {
 		'media-endpoint': 'https://micropub-adamsaunders.netlify.app/media',
 		'syndicate-to': [
-			{ uid: 'https://fed.brid.gy/', name: 'Bridgy Fed', checked: true },
-			{ uid: 'https://brid.gy/publish/mastodon', name: 'Mastodon via Bridgy', checked: true },
-			{ uid: 'https://brid.gy/publish/bluesky', name: 'Bluesky via Bridgy', checked: true },
+			{ uid: 'bridgy_fed', name: 'Bridgy Fed', checked: true },
+			{ uid: 'mastodon', name: 'Mastodon via Bridgy', checked: true },
+			{ uid: 'bluesky', name: 'Bluesky via Bridgy', checked: true },
 		],
-		// 'post-types': [
-		// 	{ type: 'note', name: 'Note' },
-		// 	{ type: 'photo', name: 'Photo' },
-		// 	{ type: 'reply', name: 'Reply' },
-		// 	{ type: 'bookmark', name: 'Bookmark' },
-		// 	{ type: 'like', name: 'Like' },
-		// 	{ type: 'article', name: 'Article' },
-		// 	{ type: 'rsvp', name: 'RSVP' },
-		// 	{ type: 'repost', name: 'Repost' },
-		// 	{ type: 'watch', name: 'Watch' },
-		// 	{ type: 'read', name: 'Read' },
-		// 	{ type: 'listen', name: 'Listen' },
-		// 	{ type: 'game', name: 'Game' },
-		// ],
+		'post-types': [
+			{ type: 'note', name: 'Note' },
+			{ type: 'photo', name: 'Photo' },
+			{ type: 'reply', name: 'Reply' },
+			{ type: 'bookmark', name: 'Bookmark' },
+			{ type: 'like', name: 'Like' },
+			{ type: 'article', name: 'Article' },
+			{ type: 'rsvp', name: 'RSVP' },
+			{ type: 'repost', name: 'Repost' },
+			{ type: 'watch', name: 'Watch' },
+			{ type: 'read', name: 'Read' },
+			{ type: 'listen', name: 'Listen' },
+			{ type: 'game', name: 'Game' },
+		],
 	},
 	formatSlug: (type, filename) => {
-	// 	const typeToSlug = {
-	// 		like: 'likes',
-	// 		bookmark: 'bookmarks',
-	// 		rsvp: 'rsvp',
-	// 		article: 'articles',
-	// 		watch: 'watched',
-	// 		read: 'read',
-	// 		listen: 'listen',
-	// 		play: 'play'
-	// 	}
+		const typeToSlug = {
+			note: 'notes',
+			photo: 'notes',
+			reply: 'notes',
+			bookmark: 'notes',
+			like: 'notes',
+			article: 'posts',
+			rsvp: 'notes',
+			repost: 'notes',
+			watch: 'notes',
+			read: 'notes',
+			listen: 'notes',
+			game: 'notes',
+		}
+		const slug = typeToSlug[type]
+
+		const now = new Date()
+		const yyyy = now.getUTCFullYear()
+		const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
+		const dd = String(now.getUTCDate()).padStart(2, '0')
+
+		const ts = Math.round(now / 1000)
+
+		console.log(filename);
+		if (slug === 'notes') {
+			return `${slug}/${yyyy}/${mm}/${dd}/${filename}`
+		}
+		if (slug === 'posts') {
+			return `${slug}/${filename}`
+		}
 		return `${filename}`
-	},
+		},
+	formatFilename: (dir = 'src', slug) => {
+	const filename = slug.split('/').pop().replace(/\.md$/, '')
+
+	// If slug contains "posts", switch dir to "_posts"
+	const outputDir = slug.match(/(^|\/)posts(\/|$)/) ? '_posts' : dir
+
+	// If slug contains "posts", add YYYY-MM-DD- prefix
+	if (outputDir === '_posts') {
+		const now = new Date()
+		const yyyy = now.getUTCFullYear()
+		const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
+		const dd = String(now.getUTCDate()).padStart(2, '0')
+		return `${outputDir.replace(/\/$/, '')}/${yyyy}-${mm}-${dd}-${filename}.md`
+	} else {
+		return `${outputDir.replace(/\/$/, '')}/${filename}.md`
+	}
+},
 })
