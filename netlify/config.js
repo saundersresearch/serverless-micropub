@@ -19,14 +19,16 @@ export const micropub = new Micropub({
 	store,
 	me: ME,
 	tokenEndpoint: TOKEN_ENDPOINT,
-	// contentDir: 'src',
-	// mediaDir: 'uploads',
+	contentDir: '_notes',
+	mediaDir: 'assets/images/notes',
 	// https://micropub.spec.indieweb.org/#configuration
 	config: {
-		// 'media-endpoint': 'https://micropub.example.com/media',
-		// 'syndicate-to': [
-		// 	{ uid: 'https://fed.brid.gy/', name: 'w/ Bridgy Fed', checked: true },
-		// ],
+		'media-endpoint': 'https://micropub-adamsaunders.netlify.app/media',
+		'syndicate-to': [
+			{ uid: 'https://fed.brid.gy/', name: 'Bridgy Fed', checked: true },
+			{ uid: 'https://brid.gy/publish/mastodon', name: 'Mastodon via Bridgy', checked: true },
+			{ uid: 'https://brid.gy/publish/bluesky', name: 'Bluesky via Bridgy', checked: true },
+		],
 		// 'post-types': [
 		// 	{ type: 'note', name: 'Note' },
 		// 	{ type: 'photo', name: 'Photo' },
