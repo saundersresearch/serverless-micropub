@@ -73,25 +73,56 @@ export const micropub = new Micropub({
 			return `${slug}/${yyyy}/${mm}/${dd}/${filename}`
 		}
 		if (slug === 'posts') {
-			return `${slug}/${filename}`
+			return `${slug}/${yyyy}/${mm}/${dd}/${filename}`
 		}
 		return `${filename}`
 		},
 	formatFilename: (dir = 'src', slug) => {
-	const filename = slug.split('/').pop().replace(/\.md$/, '')
+		const filename = slug.split('/').pop().replace(/\.md$/, '')
 
-	// If slug contains "posts", switch dir to "_posts"
-	const outputDir = slug.match(/(^|\/)posts(\/|$)/) ? '_posts' : dir
+		// If slug contains "posts", switch dir to "_posts"
+		const outputDir = slug.match(/(^|\/)posts(\/|$)/) ? '_posts' : dir
 
-	// If slug contains "posts", add YYYY-MM-DD- prefix
-	if (outputDir === '_posts') {
-		const now = new Date()
-		const yyyy = now.getUTCFullYear()
-		const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
-		const dd = String(now.getUTCDate()).padStart(2, '0')
-		return `${outputDir.replace(/\/$/, '')}/${yyyy}-${mm}-${dd}-${filename}.md`
-	} else {
-		return `${outputDir.replace(/\/$/, '')}/${filename}.md`
+		// If slug contains "posts", add YYYY-MM-DD- prefix
+		if (outputDir === '_posts') {
+			const now = new Date()
+			const yyyy = now.getUTCFullYear()
+			const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
+			const dd = String(now.getUTCDate()).padStart(2, '0')
+			return `${outputDir.replace(/\/$/, '')}/${yyyy}-${mm}-${dd}-${filename}.md`
+		} else {
+			return `${outputDir.replace(/\/$/, '')}/${filename}.md`
+		}
+	},
+	urlToFilename: (urlString, me = '', dir = '') => {
+		try {
+			const url = new URL(urlString)
+
+			// Optional: only accept your own site
+			const safeMe = typeof me === 'string' ? me : ''
+			if (safeMe && url.origin !== safeMe.replace(/\/$/, '')) return
+
+			// Normalize path and remove leading/trailing slashes
+			const path = url.pathname.replace(/^\/|\/$/g, '')
+			const parts = path.split('/')
+
+			// Must be at least: notes|posts + yyyy + mm + dd + slug
+			if (parts.length < 5) return
+
+			const [type, yyyy, mm, dd, ...rest] = parts
+			const slug = rest.join('-')
+
+			if (type === 'notes') {
+			const timestamp = slug
+			return `_notes/${timestamp}.md`
+			}
+
+			if (type === 'posts') {
+			return `_posts/${yyyy}-${mm}-${dd}-${slug}.md`
+			}
+
+		} catch (err) {
+			console.error(err?.message || 'Invalid URL:', urlString)
+		}
 	}
-},
 })
