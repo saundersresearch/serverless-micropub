@@ -42,6 +42,7 @@ export const micropub = new Micropub({
 			{ type: 'read', name: 'Read' },
 			{ type: 'listen', name: 'Listen' },
 			{ type: 'game', name: 'Game' },
+			{ type: 'checkin', name: 'Check-in' },
 		],
 	},
 	formatSlug: (type, filename) => {
@@ -58,6 +59,7 @@ export const micropub = new Micropub({
 			read: 'notes',
 			listen: 'notes',
 			game: 'notes',
+			checkin: 'notes',
 		}
 		const slug = typeToSlug[type]
 
