@@ -63,22 +63,21 @@ export const micropub = new Micropub({
 		}
 		const slug = typeToSlug[type]
 
-		const now = new Date()
-		const yyyy = now.getUTCFullYear()
-		const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
-		const dd = String(now.getUTCDate()).padStart(2, '0')
+		// Extract timestamp from filename (if present)
+		// Otherwise, use current timestamp
+		const match = filename.match(/^(\d{9,})/)
+		const ts = match ? Number(match[1]) : Math.floor(Date.now() / 1000)
+		const date = new Date(ts * 1000)
 
-		const ts = Math.round(now / 1000)
+		const yyyy = date.getUTCFullYear()
+		const mm = String(date.getUTCMonth() + 1).padStart(2, '0')
+		const dd = String(date.getUTCDate()).padStart(2, '0')
 
-		console.log(filename);
-		if (slug === 'notes') {
-			return `${slug}/${yyyy}/${mm}/${dd}/${filename}`
-		}
-		if (slug === 'posts') {
+		if (slug === 'notes' || slug === 'posts') {
 			return `${slug}/${yyyy}/${mm}/${dd}/${filename}`
 		}
 		return `${filename}`
-		},
+	},
 	formatFilename: (dir = 'src', slug) => {
 		const filename = slug.split('/').pop().replace(/\.md$/, '')
 
