@@ -125,5 +125,6 @@ export const micropub = new Micropub({
 		} catch (err) {
 			console.error(err?.message || 'Invalid URL:', urlString)
 		}
-	}
+	},
+    returnAsList: ['syndicate-to', 'category']
 })
