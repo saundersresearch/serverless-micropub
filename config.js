@@ -15,6 +15,8 @@ const store = new GitHubStore({
 	repo: GITHUB_REPO,
 })
 
+const timeZone = 'America/Chicago'
+
 export const micropub = new Micropub({
 	store,
 	me: ME,
@@ -69,9 +71,12 @@ export const micropub = new Micropub({
 		const ts = match ? Number(match[1]) : Math.floor(Date.now() / 1000)
 		const date = new Date(ts * 1000)
 
-		const yyyy = date.getUTCFullYear()
-		const mm = String(date.getUTCMonth() + 1).padStart(2, '0')
-		const dd = String(date.getUTCDate()).padStart(2, '0')
+		const [yyyy, mm, dd] = new Intl.DateTimeFormat('en-CA', {
+			timeZone: timeZone,
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit'
+		}).format(date).split('-');
 
 		if (slug === 'notes' || slug === 'posts') {
 			return `${slug}/${yyyy}/${mm}/${dd}/${filename}`
@@ -86,10 +91,15 @@ export const micropub = new Micropub({
 
 		// If slug contains "posts", add YYYY-MM-DD- prefix
 		if (outputDir === '_posts') {
-			const now = new Date()
-			const yyyy = now.getUTCFullYear()
-			const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
-			const dd = String(now.getUTCDate()).padStart(2, '0')
+			const now = new Date();
+
+			const [yyyy, mm, dd] = new Intl.DateTimeFormat('en-CA', {
+				timeZone: timeZone,
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
+			}).format(now).split('-');
+
 			return `${outputDir.replace(/\/$/, '')}/${yyyy}-${mm}-${dd}-${filename}.md`
 		} else {
 			return `${outputDir.replace(/\/$/, '')}/${filename}.md`
