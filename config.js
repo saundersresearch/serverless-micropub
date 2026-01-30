@@ -23,7 +23,7 @@ export const micropub = new Micropub({
 	mediaDir: 'assets/images/notes',
 	// https://micropub.spec.indieweb.org/#configuration
 	config: {
-		'media-endpoint': 'https://micropub-adamsaunders.netlify.app/media',
+		'media-endpoint': 'https://micropub-adamsaunders.vercel.app/media',
 		'syndicate-to': [
 			{ uid: 'bridgy_fed', name: 'Bridgy Fed', checked: true },
 			{ uid: 'mastodon', name: 'Mastodon via Bridgy', checked: true },
